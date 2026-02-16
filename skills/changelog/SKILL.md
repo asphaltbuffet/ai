@@ -35,7 +35,7 @@ Follow these steps in order. Present results to the user for review before writi
    - **No CHANGELOG.md exists** → creation mode (generate entries for all tagged releases)
    - **CHANGELOG.md exists** → append mode (generate entry for changes since the last tagged release)
 4. Identify the target version:
-   - If the user provided a version via `/changelog` or argument, use that
+   - If the user provided a version argument (e.g., `/changelog 1.2.0`), use that
    - Otherwise, ask the user what version this release will be
 
 ### Step 2: Gather Changes
