@@ -78,18 +78,24 @@ Convert to HTTPS base URL for linking commits, PRs, and releases.
 For each change, apply curation rules (see Format Rules section below), then:
 
 1. **Categorize** each change into one of: `Changed`, `Added`, `Removed`, `Fixed`
-   - Use the commit subject and body to determine the category
-   - `feat`/`add` → Added, `fix` → Fixed, `remove`/`deprecate` → Removed, everything else → Changed
-2. **Format** each entry in imperative mood:
-   - Start with a verb: Add, Fix, Remove, Refactor, Bump, Update, etc.
+   - Read the commit subject and body to understand the *impact*, not just the prefix
+   - Do not rely on conventional commit prefixes (`feat:`, `fix:`) — categorize by actual effect
+2. **Rephrase** commit messages for the changelog audience:
+   - Do not copy commit messages or PR titles verbatim
+   - Focus on consumer impact, not implementation process
+   - Align terminology consistently across entries
+   - For dependency bumps, use rounded ranges: `Bump `dep` from 2.x to 3.x` (not `2.2.0 to 3.0.1`)
+3. **Format** each entry in imperative mood:
+   - Start with a present-tense verb: Add, Fix, Remove, Refactor, Bump, Document, Deprecate, Support, Drop, Enable, Prevent, Clarify, Use
+   - Each entry must be self-describing — it must read as a complete action independent of its group heading
    - Keep to one line when possible
    - Append references: `([#123](url))` for PRs, `([`​`abc1234`​`](url))` for commits
    - Append author name in parentheses: `(Author Name)`
-3. **Sort within each group:**
+4. **Sort within each group:**
    - Breaking changes first (prefixed with `**Breaking:**`)
    - Then by importance (user-facing before internal)
    - Then newest-first
-4. **Omit empty groups** — only include groups that have entries
+5. **Omit empty groups** — only include groups that have entries
 
 Assemble the entry:
 
@@ -183,8 +189,10 @@ Each entry is an unnumbered list item:
 - Imperative verb description ([references]) (Authors)
 ```
 
-- **Imperative mood:** start with Add, Fix, Remove, Refactor, Bump, Update, etc.
-- **Self-describing:** entry should make sense without reading the group heading
+- **Imperative mood:** start with a present-tense verb: Add, Fix, Remove, Refactor, Bump, Document, Deprecate, Support, Drop, Enable, Prevent, Clarify, Use
+- **Self-describing:** each entry must read as a complete action, not a fragment dependent on its group heading
+  - Bad: `Support of CentOS` or `\`write()\` method`
+  - Good: `Support CentOS` or `Add \`write()\` method`
 - **References:** PR links `([#123](url))`, commit links `([`​`abc1234`​`](url))`, or issue links
   - Multiple refs of the same type in one set of parentheses: `(#1, #2)` not `(#1) (#2)`
 - **Authors:** after references, in parentheses: `(Alice Meerkat)` or `(Alice, Bob)`
@@ -204,6 +212,12 @@ Each entry is an unnumbered list item:
 - Runtime environment changes
 - New documentation for previously undocumented features
 - Code style changes using new language features
+
+**Rephrase** for consistency and clarity:
+- Do not copy `git log` output or PR titles verbatim — curate and contextualize
+- Align terminology across entries from different contributors
+- Adjust specificity: `Bump \`json-parser\` from 2.x to 3.x` (not exact patch versions)
+- Focus on what upgrading will do, not on the development process
 
 **Merge** related multi-commit changes into single entries with combined references.
 
@@ -237,6 +251,7 @@ A properly formatted changelog entry:
 ### Changed
 
 - **Breaking:** rename `process()` to `run()` for consistency ([#42](https://github.com/owner/repo/pull/42)) (Alice Meerkat)
+- Bump `json-parser` from 2.x to 3.x ([#40](https://github.com/owner/repo/pull/40))
 - Refactor internal queue to improve throughput ([`a1b2c3d`](https://github.com/owner/repo/commit/a1b2c3d))
 
 ### Added
