@@ -151,3 +151,78 @@ If the GitHub release does not yet exist, link to the tag comparison instead:
 ```markdown
 [VERSION]: https://github.com/owner/repo/compare/vPREVIOUS...vVERSION
 ```
+
+## Format Rules
+
+These rules follow the [Common Changelog](https://common-changelog.org/) specification.
+
+### File Structure
+
+- File starts with a first-level heading: `# Changelog`
+- Each release is a second-level heading: `## [VERSION] - YYYY-MM-DD`
+  - VERSION: semver-valid, no `v` prefix (even if git tag has one)
+  - DATE: ISO 8601 format (`YYYY-MM-DD`)
+  - VERSION should be a markdown link using reference-style links
+- Releases sorted newest-first
+- Each release contains one or more group headings
+
+### Group Order
+
+Use only these third-level headings, in this order. Omit groups with no entries.
+
+1. `### Changed` — changes to existing functionality
+2. `### Added` — new functionality
+3. `### Removed` — removed functionality
+4. `### Fixed` — bug fixes
+
+### Entry Format
+
+Each entry is an unnumbered list item:
+
+```
+- Imperative verb description ([references]) (Authors)
+```
+
+- **Imperative mood:** start with Add, Fix, Remove, Refactor, Bump, Update, etc.
+- **Self-describing:** entry should make sense without reading the group heading
+- **References:** PR links `([#123](url))`, commit links `([`​`abc1234`​`](url))`, or issue links
+  - Multiple refs of the same type in one set of parentheses: `(#1, #2)` not `(#1) (#2)`
+- **Authors:** after references, in parentheses: `(Alice Meerkat)` or `(Alice, Bob)`
+  - Optional for single-contributor projects
+- **Breaking changes:** prefix with `**Breaking:**`, list before non-breaking entries in the group
+
+### Curation Rules
+
+**Exclude** (maintenance noise):
+- Dotfile changes (`.gitignore`, `.github/`, `.gitlab/`)
+- Development-only dependency updates
+- Minor code style changes
+- Documentation formatting changes
+
+**Include** (consumer-relevant):
+- Refactorings (potential unintended side effects)
+- Runtime environment changes
+- New documentation for previously undocumented features
+- Code style changes using new language features
+
+**Merge** related multi-commit changes into single entries with combined references.
+
+**Skip** no-op changes where commits negate each other (e.g., a change followed by its revert).
+
+### Notices
+
+A notice is a single italic sentence before any change groups. Maximum one per release.
+
+Use for:
+- First release: `_First release._`
+- Upgrade guidance: `_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md)._`
+- Yanked releases: `_This release was yanked due to [reason]._`
+
+### Reference Links
+
+Place reference-style link definitions at the bottom of the file:
+
+```markdown
+[1.2.0]: https://github.com/owner/repo/releases/tag/v1.2.0
+[1.1.0]: https://github.com/owner/repo/releases/tag/v1.1.0
+```
