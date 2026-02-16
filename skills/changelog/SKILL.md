@@ -226,3 +226,26 @@ Place reference-style link definitions at the bottom of the file:
 [1.2.0]: https://github.com/owner/repo/releases/tag/v1.2.0
 [1.1.0]: https://github.com/owner/repo/releases/tag/v1.1.0
 ```
+
+## Example
+
+A properly formatted changelog entry:
+
+````markdown
+## [1.2.0] - 2026-02-16
+
+### Changed
+
+- **Breaking:** rename `process()` to `run()` for consistency ([#42](https://github.com/owner/repo/pull/42)) (Alice Meerkat)
+- Refactor internal queue to improve throughput ([`a1b2c3d`](https://github.com/owner/repo/commit/a1b2c3d))
+
+### Added
+
+- Add `--dry-run` flag to preview changes ([#38](https://github.com/owner/repo/pull/38)) (Bob Badger)
+
+### Fixed
+
+- Fix crash when input file is empty ([#41](https://github.com/owner/repo/pull/41))
+
+[1.2.0]: https://github.com/owner/repo/releases/tag/v1.2.0
+````
