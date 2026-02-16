@@ -19,3 +19,135 @@ Generate and maintain `CHANGELOG.md` files following the [Common Changelog](http
 
 - Project under git version control
 - Semantic versioning with git tags (e.g., `v1.0.0` or `1.0.0`)
+
+## Workflow
+
+Follow these steps in order. Present results to the user for review before writing any files.
+
+### Step 1: Detect State
+
+1. Check if `CHANGELOG.md` exists at the repository root
+2. List all git tags sorted by semver:
+   ```bash
+   git tag --list --sort=-v:refname
+   ```
+3. Determine the mode:
+   - **No CHANGELOG.md exists** → creation mode (generate entries for all tagged releases)
+   - **CHANGELOG.md exists** → append mode (generate entry for changes since the last tagged release)
+4. Identify the target version:
+   - If the user provided a version via `/changelog` or argument, use that
+   - Otherwise, ask the user what version this release will be
+
+### Step 2: Gather Changes
+
+For each release being generated, collect commits between the relevant tags:
+
+```bash
+git log <previous-tag>..<current-tag> --format="%H" --reverse
+```
+
+For unreleased changes (append mode):
+
+```bash
+git log <latest-tag>..HEAD --format="%H" --reverse
+```
+
+For each commit SHA, extract details:
+
+```bash
+git log -1 --format="%H%n%an%n%s%n%b" <sha>
+```
+
+Extract from each commit:
+- **Subject line** (first line of commit message)
+- **Body** (remaining lines)
+- **Author name** (`%an`)
+- **PR/issue references** — look for patterns like `(#123)`, `Fixes #456`, `Closes #789` in subject and body
+- **Commit SHA** (short form, first 7 characters) as fallback reference
+
+Determine the remote URL for constructing links:
+
+```bash
+git remote get-url origin
+```
+
+Convert to HTTPS base URL for linking commits, PRs, and releases.
+
+### Step 3: Draft Entry
+
+For each change, apply curation rules (see Format Rules section below), then:
+
+1. **Categorize** each change into one of: `Changed`, `Added`, `Removed`, `Fixed`
+   - Use the commit subject and body to determine the category
+   - `feat`/`add` → Added, `fix` → Fixed, `remove`/`deprecate` → Removed, everything else → Changed
+2. **Format** each entry in imperative mood:
+   - Start with a verb: Add, Fix, Remove, Refactor, Bump, Update, etc.
+   - Keep to one line when possible
+   - Append references: `([#123](url))` for PRs, `([`​`abc1234`​`](url))` for commits
+   - Append author name in parentheses: `(Author Name)`
+3. **Sort within each group:**
+   - Breaking changes first (prefixed with `**Breaking:**`)
+   - Then by importance (user-facing before internal)
+   - Then newest-first
+4. **Omit empty groups** — only include groups that have entries
+
+Assemble the entry:
+
+```markdown
+## [VERSION] - YYYY-MM-DD
+
+### Changed
+
+- Entry here ([#ref](url)) (Author)
+
+### Added
+
+- Entry here ([#ref](url)) (Author)
+```
+
+### Step 4: Present for Review
+
+Display the drafted changelog entry to the user in a fenced markdown code block. Ask:
+
+- Are the categories correct?
+- Should any entries be reworded, merged, or removed?
+- Is anything missing?
+
+Wait for user approval before proceeding. Incorporate any requested changes.
+
+### Step 5: Write
+
+**For new CHANGELOG.md (creation mode):**
+
+Create the file starting with `# Changelog`, followed by all release entries newest-first, with reference-style links at the bottom:
+
+```markdown
+# Changelog
+
+## [1.1.0] - 2026-01-15
+
+...
+
+## [1.0.0] - 2025-12-01
+
+_First release._
+
+[1.1.0]: https://github.com/owner/repo/releases/tag/v1.1.0
+[1.0.0]: https://github.com/owner/repo/releases/tag/v1.0.0
+```
+
+**For existing CHANGELOG.md (append mode):**
+
+Insert the new entry after the `# Changelog` heading and before the first existing `## [` release heading. Add the new reference-style link alongside existing ones at the bottom of the file.
+
+**Reference link format:**
+
+```markdown
+[VERSION]: https://github.com/owner/repo/releases/tag/vVERSION
+```
+
+If the GitHub release does not yet exist, link to the tag comparison instead:
+
+```markdown
+[VERSION]: https://github.com/owner/repo/compare/vPREVIOUS...vVERSION
+```
