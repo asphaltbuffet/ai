@@ -86,7 +86,8 @@ For each change, apply curation rules (see Format Rules section below), then:
    - Align terminology consistently across entries
    - For dependency bumps, use rounded ranges: `Bump `dep` from 2.x to 3.x` (not `2.2.0 to 3.0.1`)
 3. **Format** each entry in imperative mood:
-   - Start with a present-tense verb: Add, Fix, Remove, Refactor, Bump, Document, Deprecate, Support, Drop, Enable, Prevent, Clarify, Use
+   - **MUST** start with one of these approved verbs: Add, Bump, Clarify, Deprecate, Document, Drop, Enable, Fix, Prevent, Refactor, Remove, Support, Use
+   - Do not use other verbs (e.g., Update, Change, Modify, Rename, Improve, Introduce). Rephrase to fit an approved verb.
    - Each entry must be self-describing — it must read as a complete action independent of its group heading
    - Keep to one line when possible
    - Append references: `([#123](url))` for PRs, `([`​`abc1234`​`](url))` for commits
@@ -189,7 +190,7 @@ Each entry is an unnumbered list item:
 - Imperative verb description ([references]) (Authors)
 ```
 
-- **Imperative mood:** start with a present-tense verb: Add, Fix, Remove, Refactor, Bump, Document, Deprecate, Support, Drop, Enable, Prevent, Clarify, Use
+- **Imperative mood:** **MUST** start with one of these approved verbs: Add, Bump, Clarify, Deprecate, Document, Drop, Enable, Fix, Prevent, Refactor, Remove, Support, Use. Do not use other verbs — rephrase to fit.
 - **Self-describing:** each entry must read as a complete action, not a fragment dependent on its group heading
   - Bad: `Support of CentOS` or `\`write()\` method`
   - Good: `Support CentOS` or `Add \`write()\` method`
@@ -250,7 +251,7 @@ A properly formatted changelog entry:
 
 ### Changed
 
-- **Breaking:** rename `process()` to `run()` for consistency ([#42](https://github.com/owner/repo/pull/42)) (Alice Meerkat)
+- **Breaking:** Refactor `process()` to `run()` for consistency ([#42](https://github.com/owner/repo/pull/42)) (Alice Meerkat)
 - Bump `json-parser` from 2.x to 3.x ([#40](https://github.com/owner/repo/pull/40))
 - Refactor internal queue to improve throughput ([`a1b2c3d`](https://github.com/owner/repo/commit/a1b2c3d))
 
